@@ -101,7 +101,7 @@ struct Opts {
 
     #[arg(
         long,
-        number_of_values(1),
+        num_args = 1,
         help = "Parse and execute the argument as a command"
     )]
     exec: Vec<String>,

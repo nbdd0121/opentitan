@@ -152,7 +152,7 @@ pub struct SpiRead {
     pub mode: ReadMode,
     #[arg(short, long, help = "Hexdump the data.")]
     hexdump: bool,
-    #[arg(name = "FILE", default_value = "-")]
+    #[arg(value_name = "FILE", default_value = "-")]
     filename: PathBuf,
 
     // `disable_help_flag` disable both short and long help flags. Add long help back.
@@ -283,7 +283,7 @@ impl CommandDispatch for SpiErase {
 pub struct SpiProgram {
     #[arg(short, long, default_value = "0", help = "Start offset.")]
     start: u32,
-    #[arg(name = "FILE")]
+    #[arg(value_name = "FILE")]
     filename: PathBuf,
 }
 
