@@ -21,7 +21,7 @@ bitflags = { version = "2.1", features = ["serde"] }
 bitvec = "1.0.1"
 byteorder = "1.4.3"
 chrono = "0.4"
-clap = { version = "4.1", features = ["derive", "env"] }
+clap = { version = "4.1", features = ["derive", "env", "deprecated"] }
 crc = "3.0"
 deser-hjson = "1.0.2"
 directories = "4.0.1"

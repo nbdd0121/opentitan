@@ -31,6 +31,7 @@ rust_library(
         "cargo",
         "color",
         "default",
+        "deprecated",
         "derive",
         "env",
         "error-context",
