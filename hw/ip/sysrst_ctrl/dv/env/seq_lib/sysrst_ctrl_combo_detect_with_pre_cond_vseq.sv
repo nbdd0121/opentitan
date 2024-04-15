@@ -292,15 +292,15 @@ class sysrst_ctrl_combo_detect_with_pre_cond_vseq extends sysrst_ctrl_base_vseq;
     bit com_out_rst_req);
 
     // Sample aggregate key selection
-    bit key0_in_sel_detect = get_field_val( ral.com_sel_ctl[i].key0_in_sel, trigger_combo);
-    bit key1_in_sel_detect = get_field_val( ral.com_sel_ctl[i].key1_in_sel, trigger_combo);
-    bit key2_in_sel_detect = get_field_val( ral.com_sel_ctl[i].key2_in_sel, trigger_combo);
-    bit pwrb_in_sel_detect = get_field_val( ral.com_sel_ctl[i].pwrb_in_sel, trigger_combo);
-    bit ac_present_sel_detect = get_field_val( ral.com_sel_ctl[i].ac_present_sel, trigger_combo);
-    bit key0_in_sel_precond = get_field_val( ral.com_pre_sel_ctl[i].key0_in_sel, trigger_combo_pre);
-    bit key1_in_sel_precond = get_field_val( ral.com_pre_sel_ctl[i].key1_in_sel, trigger_combo_pre);
-    bit key2_in_sel_precond = get_field_val( ral.com_pre_sel_ctl[i].key2_in_sel, trigger_combo_pre);
-    bit pwrb_in_sel_precond = get_field_val( ral.com_pre_sel_ctl[i].pwrb_in_sel, trigger_combo_pre);
+    bit key0_in_sel_detect = get_field_val( ral.com_sel_ctl[i].key0_in_sel, trigger_combo ); 
+    bit key1_in_sel_detect = get_field_val( ral.com_sel_ctl[i].key1_in_sel, trigger_combo ); 
+    bit key2_in_sel_detect = get_field_val( ral.com_sel_ctl[i].key2_in_sel, trigger_combo ); 
+    bit pwrb_in_sel_detect = get_field_val( ral.com_sel_ctl[i].pwrb_in_sel, trigger_combo ); 
+    bit ac_present_sel_detect = get_field_val( ral.com_sel_ctl[i].ac_present_sel, trigger_combo );
+    bit key0_in_sel_precond = get_field_val( ral.com_pre_sel_ctl[i].key0_in_sel, trigger_combo_pre );
+    bit key1_in_sel_precond = get_field_val( ral.com_pre_sel_ctl[i].key1_in_sel, trigger_combo_pre );
+    bit key2_in_sel_precond = get_field_val( ral.com_pre_sel_ctl[i].key2_in_sel, trigger_combo_pre );
+    bit pwrb_in_sel_precond = get_field_val( ral.com_pre_sel_ctl[i].pwrb_in_sel, trigger_combo_pre );
     bit ac_present_sel_precond = get_field_val( ral.com_pre_sel_ctl[i].ac_present_sel,
                                             trigger_combo_pre);
     // Sample combo actions and key selections for each combo channel
