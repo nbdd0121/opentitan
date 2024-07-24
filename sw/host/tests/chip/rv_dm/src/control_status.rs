@@ -8,6 +8,7 @@ use clap::Parser;
 use opentitanlib::app::TransportWrapper;
 use opentitanlib::debug::dmi::{consts, DmiDebugger, OpenOcdDmi};
 use opentitanlib::execute_test;
+use opentitanlib::io::jtag::JtagTap;
 use opentitanlib::test_utils::init::InitializeTest;
 
 #[derive(Debug, Parser)]
@@ -16,23 +17,16 @@ struct Opts {
     init: InitializeTest,
 }
 
-// Needs to match util/openocd/target
-const RISCV_IDCODE: u32 = 0x10001cdf;
-
 fn test_control_status(opts: &Opts, transport: &TransportWrapper) -> Result<()> {
     transport.pin_strapping("PINMUX_TAP_RISCV")?.apply()?;
     transport.reset_target(opts.init.bootstrap.options.reset_delay, true)?;
 
-    let mut openocd = opts.init.jtag_params.create(transport)?.into_raw()?;
-
-    // Configure OpenOCD to expect RISC-V tap and initialize JTAG.
-    assert_eq!(
-        openocd.execute(&format!(
-            "jtag newtap riscv tap -irlen 5 -expected-id {RISCV_IDCODE:#x}"
-        ))?,
-        ""
-    );
-    assert_eq!(openocd.execute("init")?, "");
+    let mut openocd = opts
+        .init
+        .jtag_params
+        .create(transport)?
+        .connect_jtag(JtagTap::RiscvTap)?
+        .into_raw()?;
 
     let mut dmi = DmiDebugger::new(OpenOcdDmi::new(openocd, "riscv.tap")?);
 

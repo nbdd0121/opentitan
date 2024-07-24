@@ -55,8 +55,18 @@ pub trait JtagChain {
     /// Connect to the given JTAG TAP on this chain.
     fn connect(self: Box<Self>, tap: JtagTap) -> Result<Box<dyn Jtag>>;
 
+    /// Connect to the given JTAG TAP on this chain, but does not perform
+    /// target setup.
+    fn connect_jtag(mut self: Box<Self>, tap: JtagTap) -> Result<Box<dyn Jtag>> {
+        self.as_raw()?.execute("set SKIP_TARGET_SETUP 1")?;
+        self.connect(tap)
+    }
+
     /// Stop further setup and returns raw OpenOCD instance.
     fn into_raw(self: Box<Self>) -> Result<OpenOcd>;
+
+    /// Returns the underlying OpenOCD instance.
+    fn as_raw(&mut self) -> Result<&mut OpenOcd>;
 }
 
 /// A trait which represents a TAP on a JTAG chain.

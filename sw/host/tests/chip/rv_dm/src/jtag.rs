@@ -8,15 +8,17 @@ use clap::Parser;
 use opentitanlib::app::TransportWrapper;
 use opentitanlib::execute_test;
 use opentitanlib::test_utils::init::InitializeTest;
+use opentitanlib::util::parse_int::ParseInt;
 
 #[derive(Debug, Parser)]
 struct Opts {
     #[command(flatten)]
     init: InitializeTest,
+    
+    /// IDCODE of the RISCV tap.
+    #[arg(long, value_parser = u32::from_str, default_value = "0x10001cdf")]
+    riscv_idcode: u32,
 }
-
-// Needs to match util/openocd/target
-const RISCV_IDCODE: u32 = 0x10001cdf;
 
 fn test_jtag(opts: &Opts, transport: &TransportWrapper) -> Result<()> {
     // Avoid watchdog timeout by entering bootstrap mode.
@@ -26,11 +28,12 @@ fn test_jtag(opts: &Opts, transport: &TransportWrapper) -> Result<()> {
     transport.reset_target(opts.init.bootstrap.options.reset_delay, true)?;
 
     let mut openocd = opts.init.jtag_params.create(transport)?.into_raw()?;
+    let riscv_idcode = opts.riscv_idcode;
 
     // Configure OpenOCD to expect RISC-V tap and initialize JTAG.
     assert_eq!(
         openocd.execute(&format!(
-            "jtag newtap riscv tap -irlen 5 -expected-id {RISCV_IDCODE:#x}"
+            "jtag newtap riscv tap -irlen 5 -expected-id {riscv_idcode:#x}"
         ))?,
         ""
     );
@@ -39,19 +42,19 @@ fn test_jtag(opts: &Opts, transport: &TransportWrapper) -> Result<()> {
     // Read IDCODE register to ensure that it is expected.
     openocd.irscan("riscv.tap", 1)?;
     let idcode = openocd.drscan("riscv.tap", 32, 0)?;
-    assert_eq!(idcode, RISCV_IDCODE);
+    assert_eq!(idcode, riscv_idcode);
 
     // Attempt to write IDCODE
     openocd.irscan("riscv.tap", 1)?;
     assert_eq!(
         openocd.drscan("riscv.tap", 64, 0xdeadbeef)?,
-        0xdeadbeef << 32 | RISCV_IDCODE as u64
+        0xdeadbeef << 32 | riscv_idcode as u64
     );
 
     // Read back IDCODE to ensure that the value remains
     openocd.irscan("riscv.tap", 1)?;
     let idcode = openocd.drscan("riscv.tap", 32, 0)?;
-    assert_eq!(idcode, RISCV_IDCODE);
+    assert_eq!(idcode, riscv_idcode);
 
     // Check functionality of BYPASS
     openocd.irscan("riscv.tap", 0)?;

@@ -23,9 +23,6 @@ struct Opts {
     timeout: Duration,
 }
 
-// Needs to match util/openocd/target
-const RISCV_IDCODE: u32 = 0x10001cdf;
-
 fn test_ndm_reset_req(opts: &Opts, transport: &TransportWrapper) -> Result<()> {
     // This test requires RV_DM access so first strap and reset.
     transport.pin_strapping("PINMUX_TAP_RISCV")?.apply()?;
@@ -41,17 +38,8 @@ fn test_ndm_reset_req(opts: &Opts, transport: &TransportWrapper) -> Result<()> {
         .init
         .jtag_params
         .create(transport)?
-        // .connect(JtagTap::RiscvTap)?;
+        .connect_jtag(JtagTap::RiscvTap)?;
         .into_raw()?;
-
-    // Configure OpenOCD to expect RISC-V tap and initialize JTAG.
-    assert_eq!(
-        jtag.execute(&format!(
-            "jtag newtap riscv tap -irlen 5 -expected-id {RISCV_IDCODE:#x}"
-        ))?,
-        ""
-    );
-    assert_eq!(jtag.execute("init")?, "");
 
     let mut dmi = DmiDebugger::new(OpenOcdDmi::new(jtag, "riscv.tap")?);
 

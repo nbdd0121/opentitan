@@ -283,6 +283,10 @@ impl JtagChain for OpenOcdJtagChain {
     fn into_raw(self: Box<Self>) -> Result<OpenOcd> {
         Ok(self.openocd)
     }
+
+    fn as_raw(&mut self) -> Result<&mut OpenOcd> {
+        Ok(&mut self.openocd)
+    }
 }
 
 /// An JTAG interface driver over OpenOCD.
