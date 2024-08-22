@@ -1,3 +1,4 @@
+TEST
 # OpenTitan
 
 ![OpenTitan logo](https://docs.opentitan.org/doc/opentitan-logo.png)
