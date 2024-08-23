@@ -20,6 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Prepare Verible config
         run: |
+          exit 1
           echo "Concatenating Verible waivers"
           find . -type f -name '*.vbl' -exec cat {} \; >> verible_waiver
 
