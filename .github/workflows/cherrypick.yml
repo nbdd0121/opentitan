@@ -37,7 +37,7 @@ jobs:
 
       - name: Create backport PRs
         id: backport
-        uses: korthout/backport-action@e8161d6a0dbfa2651b7daa76cbb75bc7c925bbf3 # v2.4.1
+        uses: korthout/backport-action@be567af183754f6a5d831ae90f648954763f17f5 # v3.1.0
         with:
           label_pattern: "^CherryPick:([^ ]+)$"
           pull_title: "Cherry-pick to ${target_branch}: ${pull_title}"
